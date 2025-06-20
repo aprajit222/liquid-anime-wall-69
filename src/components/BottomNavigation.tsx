@@ -17,25 +17,25 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentScree
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-30">
+    <div className="fixed bottom-0 left-0 right-0 z-30 safe-area-bottom">
       <div className="backdrop-blur-xl bg-black/50 border-t border-white/10">
-        <div className="flex items-center justify-around py-2">
+        <div className="flex items-center justify-around py-1.5 sm:py-2 px-2 sm:px-4">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => onScreenChange(item.id)}
-              className={`flex flex-col items-center py-2 px-4 rounded-xl transition-all duration-200 ${
+              className={`flex flex-col items-center py-1.5 sm:py-2 px-2 sm:px-4 rounded-xl transition-all duration-200 min-w-0 flex-1 ${
                 currentScreen === item.id
                   ? 'bg-white/20 text-white'
                   : 'text-purple-200 opacity-60 hover:text-white hover:opacity-100'
               }`}
             >
-              <span className="text-xl mb-1">{item.icon}</span>
-              <span className="text-xs font-medium">{item.label}</span>
+              <span className="text-lg sm:text-xl mb-0.5 sm:mb-1">{item.icon}</span>
+              <span className="text-xs font-medium truncate">{item.label}</span>
               
               {/* Active indicator */}
               {currentScreen === item.id && (
-                <div className="absolute -bottom-1 w-1 h-1 bg-purple-400 rounded-full"></div>
+                <div className="absolute -bottom-0.5 w-1 h-1 bg-purple-400 rounded-full"></div>
               )}
             </button>
           ))}

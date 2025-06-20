@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,6 +19,12 @@ export default {
 			}
 		},
 		extend: {
+			screens: {
+				'xs': '475px',
+			},
+			spacing: {
+				'safe-area-bottom': 'env(safe-area-inset-bottom)',
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -66,7 +73,8 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				'4xl': '2rem'
 			},
 			keyframes: {
 				'accordion-down': {
