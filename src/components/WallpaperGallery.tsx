@@ -113,22 +113,6 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, 
     };
   }, [selectedWallpaper]);
 
-  // Mock wallpaper data
-  const wallpapers = Array.from({ length: 24 }, (_, i) => ({
-    id: i + 1,
-    title: `Anime Wallpaper ${i + 1}`,
-    downloads: Math.floor(Math.random() * 10000),
-    likes: Math.floor(Math.random() * 1000),
-    gradient: [
-      'from-red-400 to-pink-400',
-      'from-blue-400 to-purple-400',
-      'from-green-400 to-teal-400',
-      'from-yellow-400 to-orange-400',
-      'from-purple-400 to-indigo-400',
-      'from-pink-400 to-rose-400',
-    ][i % 6],
-  }));
-
   return (
     <div className="min-h-screen">
       {/* Liquid Glass Header */}
