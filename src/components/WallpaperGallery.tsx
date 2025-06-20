@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { ArrowLeft, Maximize, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, Maximize, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface WallpaperGalleryProps {
   categoryId: string | null;
@@ -10,6 +10,9 @@ interface WallpaperGalleryProps {
 export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, onBack }) => {
   const [selectedWallpaper, setSelectedWallpaper] = useState<number | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
+  const minSwipeDistance = 50;
 
   // Mock wallpaper data
   const wallpapers = Array.from({ length: 24 }, (_, i) => ({
@@ -26,6 +29,59 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, 
       'from-pink-400 to-rose-400',
     ][i % 6],
   }));
+
+  const navigateWallpaper = (direction: 'next' | 'prev') => {
+    if (!selectedWallpaper) return;
+    
+    const currentIndex = wallpapers.findIndex(w => w.id === selectedWallpaper);
+    let newIndex;
+    
+    if (direction === 'next') {
+      newIndex = currentIndex < wallpapers.length - 1 ? currentIndex + 1 : 0;
+    } else {
+      newIndex = currentIndex > 0 ? currentIndex - 1 : wallpapers.length - 1;
+    }
+    
+    setSelectedWallpaper(wallpapers[newIndex].id);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!selectedWallpaper) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchStartX.current - touchEndX;
+    const deltaY = touchStartY.current - touchEndY;
+    
+    // Only process horizontal swipes (ignore vertical scrolling)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+      if (deltaX > 0) {
+        // Swiped left - go to next wallpaper
+        navigateWallpaper('next');
+      } else {
+        // Swiped right - go to previous wallpaper
+        navigateWallpaper('prev');
+      }
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!selectedWallpaper) return;
+    
+    if (e.key === 'ArrowLeft') {
+      navigateWallpaper('prev');
+    } else if (e.key === 'ArrowRight') {
+      navigateWallpaper('next');
+    } else if (e.key === 'Escape') {
+      setSelectedWallpaper(null);
+      exitFullscreen();
+    }
+  };
 
   const enterFullscreen = () => {
     setIsFullscreen(true);
@@ -47,10 +103,15 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, 
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, []);
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedWallpaper]);
 
   return (
     <div className="min-h-screen">
@@ -106,14 +167,33 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, 
         </div>
       </div>
 
-      {/* Responsive Wallpaper Viewer Modal */}
+      {/* Responsive Wallpaper Viewer Modal with Swipe Support */}
       {selectedWallpaper && (
-        <div className={`fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 ${isFullscreen ? 'bg-black' : ''}`}>
+        <div 
+          className={`fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 ${isFullscreen ? 'bg-black' : ''}`}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className={`relative w-full max-w-sm mx-auto ${isFullscreen ? 'max-w-full h-full' : ''}`}>
             <div className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden ${isFullscreen ? 'h-full rounded-none border-none bg-black' : ''}`}>
               <div className={`w-full aspect-[9/16] bg-gradient-to-br ${wallpapers[selectedWallpaper - 1]?.gradient} flex items-center justify-center relative ${isFullscreen ? 'h-full aspect-auto' : ''}`}>
                 <span className={`text-white font-bold text-lg sm:text-xl ${isFullscreen ? 'text-4xl' : ''}`}>{wallpapers[selectedWallpaper - 1]?.title}</span>
                 
+                {/* Navigation arrows */}
+                <button
+                  onClick={() => navigateWallpaper('prev')}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 backdrop-blur-lg bg-black/30 border border-white/20 text-white p-2 sm:p-3 rounded-full hover:bg-black/50 transition-all duration-200 z-10"
+                >
+                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+                
+                <button
+                  onClick={() => navigateWallpaper('next')}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 backdrop-blur-lg bg-black/30 border border-white/20 text-white p-2 sm:p-3 rounded-full hover:bg-black/50 transition-all duration-200 z-10"
+                >
+                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+
                 {/* Fullscreen toggle button */}
                 {!isFullscreen && (
                   <button
@@ -133,11 +213,23 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, 
                     <X className="w-6 h-6" />
                   </button>
                 )}
+
+                {/* Swipe indicator */}
+                {!isFullscreen && (
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-xs flex items-center gap-2">
+                    <span>← Swipe →</span>
+                  </div>
+                )}
               </div>
               
-              {/* Action buttons - hidden in fullscreen */}
+              {/* Action buttons and wallpaper counter - hidden in fullscreen */}
               {!isFullscreen && (
                 <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                  {/* Wallpaper counter */}
+                  <div className="text-center text-purple-200/70 text-sm">
+                    {wallpapers.findIndex(w => w.id === selectedWallpaper) + 1} of {wallpapers.length}
+                  </div>
+                  
                   <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     <button className="backdrop-blur-lg bg-purple-500/20 border border-purple-500/30 text-purple-200 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base hover:bg-purple-500/30 transition-all duration-200">
                       📱 Set as Wallpaper
