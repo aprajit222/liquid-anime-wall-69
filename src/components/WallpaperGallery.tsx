@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Maximize, X } from 'lucide-react';
 
 interface WallpaperGalleryProps {
   categoryId: string | null;
@@ -9,6 +9,7 @@ interface WallpaperGalleryProps {
 
 export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, onBack }) => {
   const [selectedWallpaper, setSelectedWallpaper] = useState<number | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Mock wallpaper data
   const wallpapers = Array.from({ length: 24 }, (_, i) => ({
@@ -25,6 +26,31 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, 
       'from-pink-400 to-rose-400',
     ][i % 6],
   }));
+
+  const enterFullscreen = () => {
+    setIsFullscreen(true);
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    }
+  };
+
+  const exitFullscreen = () => {
+    setIsFullscreen(false);
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  };
+
+  const handleFullscreenChange = () => {
+    if (!document.fullscreenElement) {
+      setIsFullscreen(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -82,31 +108,53 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({ categoryId, 
 
       {/* Responsive Wallpaper Viewer Modal */}
       {selectedWallpaper && (
-        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="relative w-full max-w-sm mx-auto">
-            <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden">
-              <div className={`w-full aspect-[9/16] bg-gradient-to-br ${wallpapers[selectedWallpaper - 1]?.gradient} flex items-center justify-center`}>
-                <span className="text-white font-bold text-lg sm:text-xl">{wallpapers[selectedWallpaper - 1]?.title}</span>
+        <div className={`fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 ${isFullscreen ? 'bg-black' : ''}`}>
+          <div className={`relative w-full max-w-sm mx-auto ${isFullscreen ? 'max-w-full h-full' : ''}`}>
+            <div className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden ${isFullscreen ? 'h-full rounded-none border-none bg-black' : ''}`}>
+              <div className={`w-full aspect-[9/16] bg-gradient-to-br ${wallpapers[selectedWallpaper - 1]?.gradient} flex items-center justify-center relative ${isFullscreen ? 'h-full aspect-auto' : ''}`}>
+                <span className={`text-white font-bold text-lg sm:text-xl ${isFullscreen ? 'text-4xl' : ''}`}>{wallpapers[selectedWallpaper - 1]?.title}</span>
+                
+                {/* Fullscreen toggle button */}
+                {!isFullscreen && (
+                  <button
+                    onClick={enterFullscreen}
+                    className="absolute top-4 right-4 backdrop-blur-lg bg-black/30 border border-white/20 text-white p-2 rounded-lg hover:bg-black/50 transition-all duration-200"
+                  >
+                    <Maximize className="w-5 h-5" />
+                  </button>
+                )}
+
+                {/* Exit fullscreen button */}
+                {isFullscreen && (
+                  <button
+                    onClick={exitFullscreen}
+                    className="absolute top-4 right-4 backdrop-blur-lg bg-black/50 border border-white/20 text-white p-3 rounded-xl hover:bg-black/70 transition-all duration-200 z-10"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                )}
               </div>
               
-              {/* Action buttons */}
-              <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-                <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                  <button className="backdrop-blur-lg bg-purple-500/20 border border-purple-500/30 text-purple-200 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base hover:bg-purple-500/30 transition-all duration-200">
-                    📱 Set as Wallpaper
-                  </button>
-                  <button className="backdrop-blur-lg bg-blue-500/20 border border-blue-500/30 text-blue-200 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base hover:bg-blue-500/30 transition-all duration-200">
-                    💾 Download
+              {/* Action buttons - hidden in fullscreen */}
+              {!isFullscreen && (
+                <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                    <button className="backdrop-blur-lg bg-purple-500/20 border border-purple-500/30 text-purple-200 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base hover:bg-purple-500/30 transition-all duration-200">
+                      📱 Set as Wallpaper
+                    </button>
+                    <button className="backdrop-blur-lg bg-blue-500/20 border border-blue-500/30 text-blue-200 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base hover:bg-blue-500/30 transition-all duration-200">
+                      💾 Download
+                    </button>
+                  </div>
+                  
+                  <button
+                    onClick={() => setSelectedWallpaper(null)}
+                    className="w-full backdrop-blur-lg bg-white/10 border border-white/20 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base hover:bg-white/20 transition-all duration-200"
+                  >
+                    Close
                   </button>
                 </div>
-                
-                <button
-                  onClick={() => setSelectedWallpaper(null)}
-                  className="w-full backdrop-blur-lg bg-white/10 border border-white/20 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base hover:bg-white/20 transition-all duration-200"
-                >
-                  Close
-                </button>
-              </div>
+              )}
             </div>
           </div>
         </div>
