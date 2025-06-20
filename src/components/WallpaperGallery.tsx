@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Download, Heart, Share } from 'lucide-react';
+import { ArrowLeft, Download, Heart, Share, X } from 'lucide-react';
 
 interface WallpaperGalleryProps {
   categoryId: string | null;
