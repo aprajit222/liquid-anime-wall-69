@@ -1,116 +1,228 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Heart, Download, Share, Chrome as Home, MoveHorizontal as MoreHorizontal } from 'lucide-react';
+
+// Mock data for reels
+const reelsData = [
+  { 
+    id: '1', 
+    image: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg',
+    title: 'Sunset Mountain Vista',
+    creator: 'ArtistName',
+    likes: 1234,
+    downloads: 567,
+    isLiked: false
+  },
+  { 
+    id: '2', 
+    image: 'https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg',
+    title: 'Ocean Wave Serenity',
+    creator: 'WaveArtist',
+    likes: 2341,
+    downloads: 892,
+    isLiked: true
+  },
+  { 
+    id: '3', 
+    image: 'https://images.pexels.com/photos/1426718/pexels-photo-1426718.jpeg',
+    title: 'Forest Moonlight',
+    creator: 'NaturePro',
+    likes: 987,
+    downloads: 456,
+    isLiked: false
+  },
+  { 
+    id: '4', 
+    image: 'https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg',
+    title: 'City Neon Dreams',
+    creator: 'UrbanArt',
+    likes: 3456,
+    downloads: 1234,
+    isLiked: false
+  },
+];
 
 export const ReelsViewer: React.FC = () => {
-  const [currentReel, setCurrentReel] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [reels, setReels] = useState(reelsData);
+  const [showUI, setShowUI] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const reels = [
-    { 
-      id: 1, 
-      title: 'Sunset Anime Girl', 
-      creator: 'ArtistName1',
-      likes: 1234,
-      gradient: 'from-orange-400 via-red-400 to-pink-500'
-    },
-    { 
-      id: 2, 
-      title: 'Moonlight Warrior', 
-      creator: 'ArtistName2',
-      likes: 987,
-      gradient: 'from-blue-400 via-purple-400 to-indigo-500'
-    },
-    { 
-      id: 3, 
-      title: 'Cherry Blossom Dream', 
-      creator: 'ArtistName3',
-      likes: 2345,
-      gradient: 'from-pink-400 via-rose-400 to-red-400'
-    },
-  ];
+  const toggleLike = (index: number) => {
+    const newReels = [...reels];
+    newReels[index].isLiked = !newReels[index].isLiked;
+    if (newReels[index].isLiked) {
+      newReels[index].likes += 1;
+    } else {
+      newReels[index].likes -= 1;
+    }
+    setReels(newReels);
+  };
+
+  const toggleUI = () => {
+    setShowUI(!showUI);
+  };
 
   const nextReel = () => {
-    setCurrentReel((prev) => (prev + 1) % reels.length);
+    setCurrentIndex((prev) => (prev + 1) % reels.length);
   };
 
   const prevReel = () => {
-    setCurrentReel((prev) => (prev - 1 + reels.length) % reels.length);
+    setCurrentIndex((prev) => (prev - 1 + reels.length) % reels.length);
   };
 
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        prevReel();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        nextReel();
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        toggleUI();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
+  const currentReel = reels[currentIndex];
+
   return (
-    <div className="relative h-screen overflow-hidden">
-      {/* Current Reel */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${reels[currentReel].gradient} flex items-center justify-center`}>
-        <div className="absolute inset-0 bg-black/30"></div>
-        
-        {/* Reel Content */}
-        <div className="relative z-10 text-center text-white px-4">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4">{reels[currentReel].title}</h2>
-          <p className="text-lg sm:text-xl opacity-80">by {reels[currentReel].creator}</p>
+    <div 
+      ref={containerRef}
+      className="relative h-screen w-full overflow-hidden bg-black"
+      onClick={toggleUI}
+    >
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${currentReel.image})` }}
+      />
+      
+      {/* Overlay Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
+
+      {/* UI Container */}
+      <div 
+        className={`absolute inset-0 transition-opacity duration-300 ${
+          showUI ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        {/* Top UI */}
+        <div className="absolute top-12 left-1/2 transform -translate-x-1/2 z-10">
+          <div className="backdrop-blur-md bg-black/30 border border-white/20 rounded-full px-6 py-3">
+            <h1 className="text-white text-lg font-semibold">Reels</h1>
+          </div>
         </div>
 
-        {/* Responsive Side Actions */}
-        <div className="absolute right-2 sm:right-4 bottom-24 sm:bottom-32 flex flex-col gap-3 sm:gap-6 z-20">
-          <button className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full p-3 sm:p-4 hover:bg-white/30 transition-all duration-200">
-            <span className="text-xl sm:text-2xl">❤️</span>
-            <div className="text-white text-xs mt-1">{reels[currentReel].likes > 1000 ? `${(reels[currentReel].likes/1000).toFixed(1)}k` : reels[currentReel].likes}</div>
-          </button>
-          
-          <button className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full p-3 sm:p-4 hover:bg-white/30 transition-all duration-200">
-            <span className="text-xl sm:text-2xl">💾</span>
-          </button>
-          
-          <button className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full p-3 sm:p-4 hover:bg-white/30 transition-all duration-200">
-            <span className="text-xl sm:text-2xl">📤</span>
-          </button>
-          
-          <button className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full p-3 sm:p-4 hover:bg-white/30 transition-all duration-200">
-            <span className="text-xl sm:text-2xl">📱</span>
-          </button>
-        </div>
-
-        {/* Responsive Navigation */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-32 sm:bottom-40 flex gap-2 sm:gap-4 z-20">
+        {/* Side Actions */}
+        <div className="absolute right-5 top-1/3 flex flex-col gap-5 z-20">
           <button
-            onClick={prevReel}
-            className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full px-4 sm:px-6 py-2 text-white text-sm sm:text-base hover:bg-white/30 transition-all duration-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleLike(currentIndex);
+            }}
+            className="flex flex-col items-center"
+          >
+            <div className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full w-14 h-14 flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+              <Heart
+                size={28}
+                color={currentReel.isLiked ? '#ff6b6b' : '#ffffff'}
+                fill={currentReel.isLiked ? '#ff6b6b' : 'transparent'}
+              />
+            </div>
+            <span className="text-white text-xs mt-2 font-medium">
+              {currentReel.likes > 1000 ? `${(currentReel.likes/1000).toFixed(1)}k` : currentReel.likes}
+            </span>
+          </button>
+
+          <button className="flex flex-col items-center">
+            <div className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full w-14 h-14 flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+              <Download size={28} color="#ffffff" />
+            </div>
+            <span className="text-white text-xs mt-2 font-medium">
+              {currentReel.downloads > 1000 ? `${(currentReel.downloads/1000).toFixed(1)}k` : currentReel.downloads}
+            </span>
+          </button>
+
+          <button className="flex flex-col items-center">
+            <div className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full w-14 h-14 flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+              <Share size={28} color="#ffffff" />
+            </div>
+          </button>
+
+          <button className="flex flex-col items-center">
+            <div className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full w-14 h-14 flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+              <MoreHorizontal size={28} color="#ffffff" />
+            </div>
+          </button>
+        </div>
+
+        {/* Bottom Info */}
+        <div className="absolute bottom-24 left-5 right-24">
+          <div className="backdrop-blur-lg bg-black/40 border border-white/20 rounded-2xl p-5">
+            <h2 className="text-white text-xl font-bold mb-1">{currentReel.title}</h2>
+            <p className="text-white/70 text-sm mb-5">by {currentReel.creator}</p>
+            
+            <div className="flex gap-3">
+              <button className="flex-1 bg-gradient-to-r from-red-500 to-red-400 text-white py-3 px-6 rounded-full font-semibold hover:scale-105 transition-transform duration-200">
+                Set Wallpaper
+              </button>
+              
+              <button className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full w-12 h-12 flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+                <Home size={20} color="#ffffff" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Controls */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-40 flex gap-4 z-20">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              prevReel();
+            }}
+            className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full px-6 py-2 text-white text-sm hover:bg-white/30 transition-all duration-200"
           >
             ↑ Previous
           </button>
           <button
-            onClick={nextReel}
-            className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full px-4 sm:px-6 py-2 text-white text-sm sm:text-base hover:bg-white/30 transition-all duration-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              nextReel();
+            }}
+            className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-full px-6 py-2 text-white text-sm hover:bg-white/30 transition-all duration-200"
           >
             ↓ Next
           </button>
         </div>
 
-        {/* Responsive Creator Info */}
-        <div className="absolute bottom-16 sm:bottom-20 left-2 sm:left-4 z-20">
-          <div className="backdrop-blur-lg bg-white/20 border border-white/30 rounded-xl sm:rounded-2xl p-3 sm:p-4">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xs sm:text-sm">A</span>
-              </div>
-              <div>
-                <div className="text-white font-semibold text-sm sm:text-base">{reels[currentReel].creator}</div>
-                <div className="text-purple-200 text-xs sm:text-sm opacity-80">Artist</div>
-              </div>
-            </div>
+        {/* Swipe Indicator - only show on first reel */}
+        {currentIndex === 0 && (
+          <div className="absolute bottom-52 left-1/2 transform -translate-x-1/2 text-center">
+            <p className="text-white/80 text-sm font-medium mb-1">Swipe up for more</p>
+            <p className="text-white/80 text-2xl">↑</p>
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Progress Indicator */}
-        <div className="absolute top-3 sm:top-4 left-2 sm:left-4 right-2 sm:right-4 z-20">
-          <div className="flex gap-1">
-            {reels.map((_, index) => (
-              <div
-                key={index}
-                className={`h-0.5 sm:h-1 rounded-full flex-1 ${
-                  index === currentReel ? 'bg-white' : 'bg-white/30'
-                }`}
-              ></div>
-            ))}
-          </div>
+      {/* Progress Indicator */}
+      <div className="absolute top-4 left-4 right-4 z-20">
+        <div className="flex gap-1">
+          {reels.map((_, index) => (
+            <div
+              key={index}
+              className={`h-1 rounded-full flex-1 ${
+                index === currentIndex ? 'bg-white' : 'bg-white/30'
+              }`}
+            />
+          ))}
         </div>
       </div>
     </div>
