@@ -60,7 +60,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
   const stats = [
     { label: 'Total Wallpapers', value: '1,247', icon: Image, color: 'from-blue-500 to-blue-600' },
     { label: 'Total Users', value: '8,923', icon: Users, color: 'from-green-500 to-green-600' },
-    { label: 'Total Downloads', value: '156K', icon: Download, color: 'from-purple-500 to-purple-600' },
+    { label: 'Total Downloads', value: '156K', icon: Download, color: 'from-orange-500 to-orange-600' },
     { label: 'Total Views', value: '892K', icon: Eye, color: 'from-pink-500 to-pink-600' },
   ];
 
@@ -137,7 +137,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
           <div key={index} className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-200/70 text-sm font-medium">{stat.label}</p>
+                <p className="text-white/70 text-sm font-medium">{stat.label}</p>
                 <p className="text-3xl font-bold text-white mt-2">{stat.value}</p>
               </div>
               <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-xl flex items-center justify-center`}>
@@ -155,12 +155,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
           <div className="space-y-4">
             {[1, 2, 3, 4].map((item) => (
               <div key={item} className="flex items-center gap-4 p-3 backdrop-blur-lg bg-white/5 rounded-xl">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
                   <Upload className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">
                   <p className="text-white font-medium">New wallpaper uploaded</p>
-                  <p className="text-purple-200/60 text-sm">Fantasy category • 2 hours ago</p>
+                  <p className="text-white/60 text-sm">Fantasy category • 2 hours ago</p>
                 </div>
               </div>
             ))}
@@ -173,7 +173,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             {[
               { label: 'Upload Wallpaper', icon: Upload, color: 'from-blue-500 to-blue-600' },
               { label: 'Add Category', icon: Plus, color: 'from-green-500 to-green-600' },
-              { label: 'Manage Users', icon: Users, color: 'from-purple-500 to-purple-600' },
+              { label: 'Manage Users', icon: Users, color: 'from-orange-500 to-orange-600' },
               { label: 'App Settings', icon: Settings, color: 'from-pink-500 to-pink-600' },
             ].map((action, index) => (
               <button
@@ -201,13 +201,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
           <table className="w-full">
             <thead className="border-b border-white/10">
               <tr>
-                <th className="text-left p-4 text-purple-200 font-medium">User</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Device ID</th>
-                <th className="text-left p-4 text-purple-200 font-medium">IP Address</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Join Date</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Downloads</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Status</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Actions</th>
+                <th className="text-left p-4 text-white/70 font-medium">User</th>
+                <th className="text-left p-4 text-white/70 font-medium">Device ID</th>
+                <th className="text-left p-4 text-white/70 font-medium">IP Address</th>
+                <th className="text-left p-4 text-white/70 font-medium">Join Date</th>
+                <th className="text-left p-4 text-white/70 font-medium">Downloads</th>
+                <th className="text-left p-4 text-white/70 font-medium">Status</th>
+                <th className="text-left p-4 text-white/70 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -215,7 +215,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
                 <tr key={user.id} className="border-b border-white/5 hover:bg-white/5">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white font-bold">
                         {user.name.charAt(0)}
                       </div>
                       <div>
@@ -223,10 +223,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 text-purple-200 font-mono text-sm">{user.deviceId}</td>
-                  <td className="p-4 text-purple-200">{user.ipAddress}</td>
-                  <td className="p-4 text-purple-200">{user.joinDate}</td>
-                  <td className="p-4 text-purple-200">{user.downloads}</td>
+                  <td className="p-4 text-white/70 font-mono text-sm">{user.deviceId}</td>
+                  <td className="p-4 text-white/70">{user.ipAddress}</td>
+                  <td className="p-4 text-white/70">{user.joinDate}</td>
+                  <td className="p-4 text-white/70">{user.downloads}</td>
                   <td className="p-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       user.status === 'active' 
@@ -266,9 +266,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
       <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6">
         <div className="space-y-6">
           <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center">
-            <Upload className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+            <Upload className="w-12 h-12 text-blue-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-white mb-2">Upload Wallpapers</h3>
-            <p className="text-purple-200/70 mb-4">Drag and drop your images here or click to browse</p>
+            <p className="text-white/70 mb-4">Drag and drop your images here or click to browse</p>
             <input
               type="file"
               multiple
@@ -278,7 +278,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             />
             <label
               htmlFor="wallpaper-upload"
-              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 cursor-pointer inline-block"
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 cursor-pointer inline-block"
             >
               Choose Files
             </label>
@@ -286,7 +286,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-purple-200 font-medium mb-2">Category</label>
+              <label className="block text-white/70 font-medium mb-2">Category</label>
               <select className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white">
                 <option value="">Select Category</option>
                 {categories.map(cat => (
@@ -295,11 +295,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
               </select>
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2">Tags</label>
+              <label className="block text-white/70 font-medium mb-2">Tags</label>
               <input
                 type="text"
                 placeholder="anime, action, fantasy"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-purple-200/60"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/60"
               />
             </div>
           </div>
@@ -319,51 +319,51 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
           <h3 className="text-lg font-semibold text-white mb-4">AdMob Settings</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-purple-200 font-medium mb-2 text-sm">App ID</label>
+              <label className="block text-white/70 font-medium mb-2 text-sm">App ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx~xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-white/60 text-sm"
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2 text-sm">Banner Ad Unit ID</label>
+              <label className="block text-white/70 font-medium mb-2 text-sm">Banner Ad Unit ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-white/60 text-sm"
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2 text-sm">Interstitial Ad Unit ID</label>
+              <label className="block text-white/70 font-medium mb-2 text-sm">Interstitial Ad Unit ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-white/60 text-sm"
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2 text-sm">Rewarded Ad Unit ID</label>
+              <label className="block text-white/70 font-medium mb-2 text-sm">Rewarded Ad Unit ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-white/60 text-sm"
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2 text-sm">Native Ad Unit ID</label>
+              <label className="block text-white/70 font-medium mb-2 text-sm">Native Ad Unit ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-white/60 text-sm"
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2 text-sm">Open App Ad Unit ID</label>
+              <label className="block text-white/70 font-medium mb-2 text-sm">Open App Ad Unit ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-white/60 text-sm"
               />
             </div>
           </div>
@@ -374,8 +374,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Monitor className="w-4 h-4 text-purple-400" />
-                <span className="text-purple-200 text-sm">Banner Ads</span>
+                <Monitor className="w-4 h-4 text-blue-400" />
+                <span className="text-white/70 text-sm">Banner Ads</span>
               </div>
               <input
                 type="checkbox"
@@ -386,8 +386,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <PlayCircle className="w-4 h-4 text-purple-400" />
-                <span className="text-purple-200 text-sm">Interstitial Ads</span>
+                <PlayCircle className="w-4 h-4 text-blue-400" />
+                <span className="text-white/70 text-sm">Interstitial Ads</span>
               </div>
               <input
                 type="checkbox"
@@ -398,8 +398,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Gift className="w-4 h-4 text-purple-400" />
-                <span className="text-purple-200 text-sm">Rewarded Ads</span>
+                <Gift className="w-4 h-4 text-blue-400" />
+                <span className="text-white/70 text-sm">Rewarded Ads</span>
               </div>
               <input
                 type="checkbox"
@@ -410,8 +410,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Star className="w-4 h-4 text-purple-400" />
-                <span className="text-purple-200 text-sm">Native Ads</span>
+                <Star className="w-4 h-4 text-blue-400" />
+                <span className="text-white/70 text-sm">Native Ads</span>
               </div>
               <input
                 type="checkbox"
@@ -422,8 +422,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4 text-purple-400" />
-                <span className="text-purple-200 text-sm">Open App Ads</span>
+                <Smartphone className="w-4 h-4 text-blue-400" />
+                <span className="text-white/70 text-sm">Open App Ads</span>
               </div>
               <input
                 type="checkbox"
@@ -434,7 +434,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             </div>
             
             <div>
-              <label className="block text-purple-200 font-medium mb-2 text-sm">
+              <label className="block text-white/70 font-medium mb-2 text-sm">
                 Interstitial Interval (wallpapers)
               </label>
               <input
@@ -446,7 +446,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             </div>
             
             <div>
-              <label className="block text-purple-200 font-medium mb-2 text-sm">Native Ad Frequency</label>
+              <label className="block text-white/70 font-medium mb-2 text-sm">Native Ad Frequency</label>
               <input
                 type="number"
                 value={adSettings.nativeFrequency}
@@ -462,26 +462,26 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
         <h3 className="text-lg font-semibold text-white mb-4">Firebase Configuration</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-purple-200 font-medium mb-2 text-sm">API Key</label>
+            <label className="block text-white/70 font-medium mb-2 text-sm">API Key</label>
             <input
               type="text"
               placeholder="AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-              className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+              className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-white/60 text-sm"
             />
           </div>
           <div>
-            <label className="block text-purple-200 font-medium mb-2 text-sm">Project ID</label>
+            <label className="block text-white/70 font-medium mb-2 text-sm">Project ID</label>
             <input
               type="text"
               placeholder="your-project-id"
-              className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+              className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-white/60 text-sm"
             />
           </div>
         </div>
       </div>
 
       <div className="flex justify-end">
-        <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 text-sm">
+        <button className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 text-sm">
           Save Ad Settings
         </button>
       </div>
@@ -499,7 +499,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
           <h3 className="text-lg font-semibold text-white mb-4">General Settings</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-purple-200 font-medium mb-2">App Name</label>
+              <label className="block text-white/70 font-medium mb-2">App Name</label>
               <input
                 type="text"
                 defaultValue="Anime Wallpapers"
@@ -507,7 +507,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2">App Version</label>
+              <label className="block text-white/70 font-medium mb-2">App Version</label>
               <input
                 type="text"
                 defaultValue="1.0.0"
@@ -515,7 +515,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2">Max Downloads Per Day</label>
+              <label className="block text-white/70 font-medium mb-2">Max Downloads Per Day</label>
               <input
                 type="number"
                 defaultValue="50"
@@ -529,15 +529,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
           <h3 className="text-lg font-semibold text-white mb-4">Privacy Settings</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-purple-200">Collect User Analytics</span>
+              <span className="text-white/70">Collect User Analytics</span>
               <input type="checkbox" defaultChecked className="w-5 h-5" />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-purple-200">Allow Anonymous Usage</span>
+              <span className="text-white/70">Allow Anonymous Usage</span>
               <input type="checkbox" defaultChecked className="w-5 h-5" />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-purple-200">Require User Registration</span>
+              <span className="text-white/70">Require User Registration</span>
               <input type="checkbox" className="w-5 h-5" />
             </div>
           </div>
@@ -560,7 +560,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             placeholder="Category Name"
             value={newCategory.name}
             onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-            className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-purple-200/60"
+            className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/60"
           />
           <div className="relative">
             <input
@@ -572,7 +572,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             />
             <label
               htmlFor="new-category-image"
-              className="block w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-purple-200/60 cursor-pointer hover:bg-white/15 transition-colors"
+              className="block w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white/60 cursor-pointer hover:bg-white/15 transition-colors"
             >
               {newCategory.image ? 'Image Selected' : 'Choose Image'}
             </label>
@@ -582,11 +582,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
             placeholder="Description"
             value={newCategory.description}
             onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-            className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-purple-200/60"
+            className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/60"
           />
           <button
             onClick={handleAddCategory}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 flex items-center justify-center gap-2"
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 flex items-center justify-center gap-2"
           >
             <Plus className="w-5 h-5" />
             Add Category
@@ -617,7 +617,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
                       />
                       <label
                         htmlFor={`edit-image-${category.id}`}
-                        className="block w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-2 text-purple-200/60 cursor-pointer hover:bg-white/15 transition-colors"
+                        className="block w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-2 text-white/60 cursor-pointer hover:bg-white/15 transition-colors"
                       >
                         Change Image
                       </label>
@@ -652,14 +652,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
                     {category.image ? (
                       <img src={category.image} alt={category.name} className="w-16 h-16 object-cover rounded-lg" />
                     ) : (
-                      <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center text-white text-sm">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center text-white text-sm">
                         No Image
                       </div>
                     )}
                     <div>
                       <h3 className="text-white font-semibold text-lg">{category.name}</h3>
-                      <p className="text-purple-200/70 text-sm">{category.description}</p>
-                      <p className="text-purple-200/50 text-xs">{category.wallpaperCount} wallpapers</p>
+                      <p className="text-white/70 text-sm">{category.description}</p>
+                      <p className="text-white/50 text-xs">{category.wallpaperCount} wallpapers</p>
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -689,7 +689,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-white">Wallpaper Management</h2>
-        <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 flex items-center gap-2">
+        <button className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 flex items-center gap-2">
           <Plus className="w-5 h-5" />
           Add Wallpaper
         </button>
@@ -700,11 +700,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
           <table className="w-full">
             <thead className="border-b border-white/10">
               <tr>
-                <th className="text-left p-4 text-purple-200 font-medium">Wallpaper</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Category</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Downloads</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Likes</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Actions</th>
+                <th className="text-left p-4 text-white/70 font-medium">Wallpaper</th>
+                <th className="text-left p-4 text-white/70 font-medium">Category</th>
+                <th className="text-left p-4 text-white/70 font-medium">Downloads</th>
+                <th className="text-left p-4 text-white/70 font-medium">Likes</th>
+                <th className="text-left p-4 text-white/70 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -712,16 +712,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
                 <tr key={item} className="border-b border-white/5 hover:bg-white/5">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg"></div>
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg"></div>
                       <div>
                         <p className="text-white font-medium">Anime Wallpaper {item}</p>
-                        <p className="text-purple-200/60 text-sm">1920x1080</p>
+                        <p className="text-white/60 text-sm">1920x1080</p>
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 text-purple-200">Action</td>
-                  <td className="p-4 text-purple-200">1,234</td>
-                  <td className="p-4 text-purple-200">89</td>
+                  <td className="p-4 text-white/70">Action</td>
+                  <td className="p-4 text-white/70">1,234</td>
+                  <td className="p-4 text-white/70">89</td>
                   <td className="p-4">
                     <div className="flex gap-2">
                       <button className="p-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors">
@@ -747,7 +747,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
       <div className="fixed left-0 top-0 bottom-0 w-64 backdrop-blur-xl bg-black/80 border-r border-white/10 p-6">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
               <Shield className="w-4 h-4 text-white" />
             </div>
             <h1 className="text-lg font-bold text-white">Admin</h1>
@@ -767,8 +767,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
               }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 activeTab === item.id
-                  ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-500/30'
-                  : 'text-purple-200 hover:text-white hover:bg-white/5'
+                  ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-white border border-blue-500/30'
+                  : 'text-white/70 hover:text-white hover:bg-white/5'
               }`}
             >
               <item.icon className="w-5 h-5" />
@@ -802,13 +802,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-black">
       <div className="flex">
         {/* Desktop Sidebar */}
         <div className="hidden lg:block w-64 min-h-screen backdrop-blur-xl bg-black/50 border-r border-white/10">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center">
                 <Shield className="w-6 h-6 text-white" />
               </div>
               <h1 className="text-xl font-bold text-white">Admin Panel</h1>
@@ -821,8 +821,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
                   onClick={() => setActiveTab(item.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                     activeTab === item.id
-                      ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-500/30'
-                      : 'text-purple-200 hover:text-white hover:bg-white/5'
+                      ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-white border border-blue-500/30'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   <item.icon className="w-5 h-5" />
