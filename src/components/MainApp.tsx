@@ -67,8 +67,10 @@ export const MainApp: React.FC = () => {
       case 'home':
         return (
           <>
-            <div className="flex items-center justify-between p-4 pb-0">
-              <h1 className="text-2xl font-bold text-white">HQ Anime Wall</h1>
+            <div className="flex items-center justify-between p-6">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
+                HQ Anime Wall
+              </h1>
             </div>
             <CategoryGrid onCategorySelect={handleCategorySelect} />
           </>
@@ -90,8 +92,10 @@ export const MainApp: React.FC = () => {
       default:
         return (
           <>
-            <div className="flex items-center justify-between p-4 pb-0">
-              <h1 className="text-2xl font-bold text-white">HQ Anime Wall</h1>
+            <div className="flex items-center justify-between p-6">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
+                HQ Anime Wall
+              </h1>
             </div>
             <CategoryGrid onCategorySelect={handleCategorySelect} />
           </>
@@ -100,14 +104,19 @@ export const MainApp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black">
-      <div className="pb-32">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-black relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_50%)]"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-pink-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      
+      <div className="relative z-10 pb-32">
         {renderScreen()}
       </div>
       
       {currentScreen !== 'admin' && (
         <>
-          <div className="fixed bottom-16 left-0 right-0 z-20">
+          <div className="fixed bottom-20 left-0 right-0 z-20">
             <AdBanner page={currentScreen} className="mx-4 mb-2" />
           </div>
           <BottomNavigation currentScreen={currentScreen} onScreenChange={setCurrentScreen} />
@@ -123,17 +132,17 @@ export const MainApp: React.FC = () => {
       {/* Interstitial Ad Modal */}
       {showInterstitial && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm" />
-          <div className="relative backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-8 mx-4 max-w-sm w-full text-center">
-            <div className="mb-4">
-              <h3 className="text-white text-lg font-semibold mb-2">Advertisement</h3>
-              <div className="w-full h-32 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center">
-                <p className="text-white/60">320x180 Interstitial Ad</p>
+          <div className="fixed inset-0 bg-black/90 backdrop-blur-md" />
+          <div className="relative backdrop-blur-2xl bg-white/5 border border-white/10 rounded-3xl p-8 mx-4 max-w-sm w-full text-center shadow-2xl">
+            <div className="mb-6">
+              <h3 className="text-white text-xl font-semibold mb-4">Advertisement</h3>
+              <div className="w-full h-40 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-2xl flex items-center justify-center border border-white/10">
+                <p className="text-white/60 text-sm">320x180 Interstitial Ad</p>
               </div>
             </div>
             <button
               onClick={() => setShowInterstitial(false)}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-xl font-medium hover:scale-105 transition-transform duration-200"
+              className="bg-gradient-to-r from-purple-500/80 to-pink-500/80 backdrop-blur-xl text-white px-8 py-3 rounded-2xl font-medium hover:scale-105 transition-all duration-300 border border-white/10"
             >
               Continue
             </button>

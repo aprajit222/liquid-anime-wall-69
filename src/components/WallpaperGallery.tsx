@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { ArrowLeft, Download, Heart, Share, X } from 'lucide-react';
+import { ArrowLeft, Download, Heart, Share } from 'lucide-react';
 
 interface WallpaperGalleryProps {
   categoryId: string | null;
@@ -39,35 +40,36 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({
   const handleWallpaperClick = (wallpaper: any) => {
     setSelectedWallpaper(wallpaper);
     setIsModalOpen(true);
-    onWallpaperView(); // Call the prop function
+    onWallpaperView();
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen text-white">
       {/* Back Button */}
       <button 
         onClick={onBack}
-        className="fixed top-4 left-4 bg-gray-800 bg-opacity-50 backdrop-blur-md text-white p-2 rounded-full hover:bg-gray-700 transition-colors z-10"
+        className="fixed top-6 left-6 backdrop-blur-2xl bg-white/10 border border-white/20 text-white p-3 rounded-2xl hover:bg-white/20 transition-all duration-300 z-10 shadow-lg"
       >
         <ArrowLeft size={24} />
       </button>
 
       {/* Gallery */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-6 pt-20">
         {filteredWallpapers.map(wallpaper => (
           <div 
             key={wallpaper.id} 
-            className="relative rounded-lg overflow-hidden shadow-md cursor-pointer"
+            className="relative rounded-3xl overflow-hidden shadow-xl cursor-pointer group backdrop-blur-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105"
             onClick={() => handleWallpaperClick(wallpaper)}
           >
             <img 
               src={wallpaper.url} 
               alt={wallpaper.title} 
-              className="w-full h-48 object-cover transform hover:scale-105 transition-transform duration-200" 
+              className="w-full h-48 object-cover" 
             />
-            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-gray-900 to-transparent p-4">
-              <h3 className="text-lg font-semibold">{wallpaper.title}</h3>
-              <p className="text-sm text-gray-300">by {wallpaper.creator}</p>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute bottom-0 left-0 w-full p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              <h3 className="text-lg font-semibold text-white">{wallpaper.title}</h3>
+              <p className="text-sm text-white/70">by {wallpaper.creator}</p>
             </div>
           </div>
         ))}
@@ -75,39 +77,45 @@ export const WallpaperGallery: React.FC<WallpaperGalleryProps> = ({
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm">
-          <div className="relative bg-gray-800 rounded-xl shadow-lg max-w-2xl mx-4 w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/80">
+          <div className="relative backdrop-blur-2xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl max-w-2xl mx-4 w-full overflow-hidden">
             {/* Close Button */}
             <button 
               onClick={closeModal}
-              className="absolute top-2 right-2 bg-gray-700 bg-opacity-50 backdrop-blur-md text-white p-2 rounded-full hover:bg-gray-600 transition-colors"
+              className="absolute top-4 right-4 backdrop-blur-xl bg-white/20 border border-white/30 text-white p-2 rounded-2xl hover:bg-white/30 transition-all duration-300 z-10"
             >
-              <X size={20} />
+              <ArrowLeft size={20} className="rotate-45" />
             </button>
 
             <img 
               src={selectedWallpaper.url} 
               alt={selectedWallpaper.title} 
-              className="w-full h-96 object-cover rounded-t-xl" 
+              className="w-full h-96 object-cover" 
             />
 
             <div className="p-6">
-              <h2 className="text-2xl font-bold mb-2">{selectedWallpaper.title}</h2>
-              <p className="text-gray-300 mb-4">by {selectedWallpaper.creator}</p>
+              <h2 className="text-2xl font-bold mb-2 text-white">{selectedWallpaper.title}</h2>
+              <p className="text-white/70 mb-6">by {selectedWallpaper.creator}</p>
 
               {/* Actions */}
               <div className="flex justify-around">
-                <button className="flex flex-col items-center justify-center hover:text-purple-400 transition-colors">
-                  <Heart size={28} />
-                  <span className="text-sm mt-1">Like</span>
+                <button className="flex flex-col items-center justify-center hover:text-purple-400 transition-colors group">
+                  <div className="backdrop-blur-xl bg-white/10 border border-white/20 p-4 rounded-2xl group-hover:bg-white/20 transition-all duration-300">
+                    <Heart size={28} />
+                  </div>
+                  <span className="text-sm mt-2">Like</span>
                 </button>
-                <button className="flex flex-col items-center justify-center hover:text-purple-400 transition-colors">
-                  <Download size={28} />
-                  <span className="text-sm mt-1">Download</span>
+                <button className="flex flex-col items-center justify-center hover:text-purple-400 transition-colors group">
+                  <div className="backdrop-blur-xl bg-white/10 border border-white/20 p-4 rounded-2xl group-hover:bg-white/20 transition-all duration-300">
+                    <Download size={28} />
+                  </div>
+                  <span className="text-sm mt-2">Download</span>
                 </button>
-                <button className="flex flex-col items-center justify-center hover:text-purple-400 transition-colors">
-                  <Share size={28} />
-                  <span className="text-sm mt-1">Share</span>
+                <button className="flex flex-col items-center justify-center hover:text-purple-400 transition-colors group">
+                  <div className="backdrop-blur-xl bg-white/10 border border-white/20 p-4 rounded-2xl group-hover:bg-white/20 transition-all duration-300">
+                    <Share size={28} />
+                  </div>
+                  <span className="text-sm mt-2">Share</span>
                 </button>
               </div>
             </div>

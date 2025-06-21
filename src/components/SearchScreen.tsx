@@ -13,10 +13,10 @@ export const SearchScreen: React.FC = () => {
         id: i + 1,
         title: `${query} Wallpaper ${i + 1}`,
         gradient: [
-          'from-red-400 to-pink-400',
-          'from-blue-400 to-purple-400',
-          'from-green-400 to-teal-400',
-          'from-yellow-400 to-orange-400',
+          'from-red-400/40 to-pink-400/40',
+          'from-blue-400/40 to-purple-400/40',
+          'from-green-400/40 to-teal-400/40',
+          'from-yellow-400/40 to-orange-400/40',
         ][i % 4],
       }));
       setSearchResults(mockResults);
@@ -30,18 +30,18 @@ export const SearchScreen: React.FC = () => {
       {/* Header */}
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">Search Wallpapers</h1>
-        <p className="text-purple-200 opacity-80">Find your perfect anime wallpaper</p>
+        <p className="text-white/60">Find your perfect anime wallpaper</p>
       </div>
 
       {/* Search Bar */}
       <div className="mb-8 max-w-md mx-auto">
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-4">
+        <div className="backdrop-blur-2xl bg-white/10 border border-white/20 rounded-3xl p-4 shadow-lg">
           <input
             type="text"
             placeholder="Search for anime, character, or style..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full bg-transparent text-white placeholder-purple-200 placeholder-opacity-60 outline-none text-lg"
+            className="w-full bg-transparent text-white placeholder-white/50 outline-none text-lg"
           />
         </div>
       </div>
@@ -55,7 +55,7 @@ export const SearchScreen: React.FC = () => {
               <button
                 key={term}
                 onClick={() => handleSearch(term)}
-                className="backdrop-blur-lg bg-white/10 border border-white/20 text-purple-200 px-4 py-2 rounded-xl hover:bg-white/20 transition-all duration-200"
+                className="backdrop-blur-xl bg-white/10 border border-white/20 text-white/80 px-4 py-2 rounded-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105"
               >
                 {term}
               </button>
@@ -73,12 +73,12 @@ export const SearchScreen: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {searchResults.map((result) => (
               <div key={result.id} className="group cursor-pointer">
-                <div className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-300 hover:scale-105">
-                  <div className={`w-full aspect-[9/16] bg-gradient-to-br ${result.gradient} flex items-center justify-center`}>
+                <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl overflow-hidden hover:bg-white/10 transition-all duration-300 hover:scale-105 shadow-lg">
+                  <div className={`w-full aspect-[9/16] bg-gradient-to-br ${result.gradient} flex items-center justify-center backdrop-blur-xl`}>
                     <span className="text-white font-semibold text-center px-2">{result.title}</span>
                   </div>
                   <div className="p-3">
-                    <div className="text-purple-200 text-xs text-center opacity-70">
+                    <div className="text-white/60 text-xs text-center">
                       HD Quality • Free Download
                     </div>
                   </div>
@@ -92,10 +92,10 @@ export const SearchScreen: React.FC = () => {
       {/* Empty State */}
       {searchQuery && searchResults.length === 0 && (
         <div className="text-center max-w-md mx-auto">
-          <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8">
+          <div className="backdrop-blur-2xl bg-white/5 border border-white/10 rounded-3xl p-8 shadow-lg">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-xl font-semibold text-white mb-2">No results found</h3>
-            <p className="text-purple-200 opacity-70">Try searching for different keywords or browse categories</p>
+            <p className="text-white/60">Try searching for different keywords or browse categories</p>
           </div>
         </div>
       )}

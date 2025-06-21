@@ -26,8 +26,8 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentScree
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-30 safe-area-bottom">
-      <div className="backdrop-blur-xl bg-black/50 border-t border-white/10">
-        <div className="flex items-center justify-around py-1.5 sm:py-2 px-2 sm:px-4">
+      <div className="backdrop-blur-2xl bg-black/20 border-t border-white/10">
+        <div className="flex items-center justify-around py-3 px-4">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -44,18 +44,23 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentScree
                 };
                 document.addEventListener('touchend', handleTouchEnd);
               }}
-              className={`flex flex-col items-center py-1.5 sm:py-2 px-2 sm:px-4 rounded-xl transition-all duration-200 min-w-0 flex-1 ${
+              className={`flex flex-col items-center py-3 px-4 rounded-2xl transition-all duration-300 min-w-0 flex-1 relative group ${
                 currentScreen === item.id
-                  ? 'bg-white/20 text-white'
-                  : 'text-purple-200 opacity-60 hover:text-white hover:opacity-100'
+                  ? 'bg-white/10 text-white border border-white/20 shadow-lg'
+                  : 'text-white/60 hover:text-white hover:bg-white/5'
               }`}
             >
-              <span className="text-lg sm:text-xl mb-0.5 sm:mb-1">{item.icon}</span>
-              <span className="text-xs font-medium truncate">{item.label}</span>
+              {/* Glassmorphism background for active state */}
+              {currentScreen === item.id && (
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 rounded-2xl backdrop-blur-xl"></div>
+              )}
+              
+              <span className="text-xl mb-1 relative z-10 group-hover:scale-110 transition-transform duration-200">{item.icon}</span>
+              <span className="text-xs font-medium truncate relative z-10">{item.label}</span>
               
               {/* Active indicator */}
               {currentScreen === item.id && (
-                <div className="absolute -bottom-0.5 w-1 h-1 bg-purple-400 rounded-full"></div>
+                <div className="absolute -bottom-1 w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full shadow-lg"></div>
               )}
             </button>
           ))}
