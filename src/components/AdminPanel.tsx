@@ -18,18 +18,33 @@ import {
   Monitor,
   Smartphone,
   MapPin,
-  Calendar
+  Calendar,
+  Gift,
+  PlayCircle,
+  Star,
+  ArrowLeft
 } from 'lucide-react';
 
-export const AdminPanel: React.FC = () => {
+interface AdminPanelProps {
+  onBack?: () => void;
+}
+
+export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<any>(null);
   const [newCategory, setNewCategory] = useState({ name: '', image: '', description: '' });
   const [adSettings, setAdSettings] = useState({
     bannerEnabled: true,
+    interstitialEnabled: true,
+    rewardedEnabled: true,
+    nativeEnabled: true,
+    openAppEnabled: true,
     interstitialInterval: 6,
     bannerPages: ['home', 'gallery', 'reels', 'search'],
-    interstitialPages: ['gallery']
+    interstitialPages: ['gallery'],
+    rewardedTrigger: 'download',
+    nativeFrequency: 5
   });
 
   const menuItems = [
@@ -296,112 +311,177 @@ export const AdminPanel: React.FC = () => {
   const renderAdSettings = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-white">Ad Configuration</h2>
+        <h2 className="text-xl lg:text-2xl font-bold text-white">Ad Configuration</h2>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6">
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-4 lg:p-6">
           <h3 className="text-lg font-semibold text-white mb-4">AdMob Settings</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-purple-200 font-medium mb-2">App ID</label>
+              <label className="block text-purple-200 font-medium mb-2 text-sm">App ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx~xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-purple-200/60"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2">Banner Ad Unit ID</label>
+              <label className="block text-purple-200 font-medium mb-2 text-sm">Banner Ad Unit ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-purple-200/60"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
               />
             </div>
             <div>
-              <label className="block text-purple-200 font-medium mb-2">Interstitial Ad Unit ID</label>
+              <label className="block text-purple-200 font-medium mb-2 text-sm">Interstitial Ad Unit ID</label>
               <input
                 type="text"
                 placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-purple-200/60"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-purple-200 font-medium mb-2 text-sm">Rewarded Ad Unit ID</label>
+              <input
+                type="text"
+                placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-purple-200 font-medium mb-2 text-sm">Native Ad Unit ID</label>
+              <input
+                type="text"
+                placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-purple-200 font-medium mb-2 text-sm">Open App Ad Unit ID</label>
+              <input
+                type="text"
+                placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
               />
             </div>
           </div>
         </div>
 
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Ad Placement Settings</h3>
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-4 lg:p-6">
+          <h3 className="text-lg font-semibold text-white mb-4">Ad Controls</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-purple-200">Enable Banner Ads</span>
+              <div className="flex items-center gap-2">
+                <Monitor className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-200 text-sm">Banner Ads</span>
+              </div>
               <input
                 type="checkbox"
                 checked={adSettings.bannerEnabled}
                 onChange={(e) => setAdSettings({...adSettings, bannerEnabled: e.target.checked})}
-                className="w-5 h-5"
+                className="w-4 h-4"
               />
             </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <PlayCircle className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-200 text-sm">Interstitial Ads</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={adSettings.interstitialEnabled}
+                onChange={(e) => setAdSettings({...adSettings, interstitialEnabled: e.target.checked})}
+                className="w-4 h-4"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Gift className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-200 text-sm">Rewarded Ads</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={adSettings.rewardedEnabled}
+                onChange={(e) => setAdSettings({...adSettings, rewardedEnabled: e.target.checked})}
+                className="w-4 h-4"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Star className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-200 text-sm">Native Ads</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={adSettings.nativeEnabled}
+                onChange={(e) => setAdSettings({...adSettings, nativeEnabled: e.target.checked})}
+                className="w-4 h-4"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Smartphone className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-200 text-sm">Open App Ads</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={adSettings.openAppEnabled}
+                onChange={(e) => setAdSettings({...adSettings, openAppEnabled: e.target.checked})}
+                className="w-4 h-4"
+              />
+            </div>
+            
             <div>
-              <label className="block text-purple-200 font-medium mb-2">
-                Interstitial Interval (every X wallpapers)
+              <label className="block text-purple-200 font-medium mb-2 text-sm">
+                Interstitial Interval (wallpapers)
               </label>
               <input
                 type="number"
                 value={adSettings.interstitialInterval}
                 onChange={(e) => setAdSettings({...adSettings, interstitialInterval: parseInt(e.target.value)})}
-                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white"
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white text-sm"
               />
             </div>
+            
             <div>
-              <label className="block text-purple-200 font-medium mb-2">Banner Ad Pages</label>
-              <div className="space-y-2">
-                {['home', 'gallery', 'reels', 'search'].map(page => (
-                  <label key={page} className="flex items-center gap-2 text-purple-200">
-                    <input
-                      type="checkbox"
-                      checked={adSettings.bannerPages.includes(page)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setAdSettings({...adSettings, bannerPages: [...adSettings.bannerPages, page]});
-                        } else {
-                          setAdSettings({...adSettings, bannerPages: adSettings.bannerPages.filter(p => p !== page)});
-                        }
-                      }}
-                    />
-                    {page.charAt(0).toUpperCase() + page.slice(1)}
-                  </label>
-                ))}
-              </div>
+              <label className="block text-purple-200 font-medium mb-2 text-sm">Native Ad Frequency</label>
+              <input
+                type="number"
+                value={adSettings.nativeFrequency}
+                onChange={(e) => setAdSettings({...adSettings, nativeFrequency: parseInt(e.target.value)})}
+                className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white text-sm"
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6">
+      <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-4 lg:p-6">
         <h3 className="text-lg font-semibold text-white mb-4">Firebase Configuration</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-purple-200 font-medium mb-2">API Key</label>
+            <label className="block text-purple-200 font-medium mb-2 text-sm">API Key</label>
             <input
               type="text"
               placeholder="AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-              className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-purple-200/60"
+              className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
             />
           </div>
           <div>
-            <label className="block text-purple-200 font-medium mb-2">Project ID</label>
+            <label className="block text-purple-200 font-medium mb-2 text-sm">Project ID</label>
             <input
               type="text"
               placeholder="your-project-id"
-              className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-purple-200/60"
+              className="w-full backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl px-3 py-2 lg:px-4 lg:py-3 text-white placeholder-purple-200/60 text-sm"
             />
           </div>
         </div>
       </div>
 
       <div className="flex justify-end">
-        <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200">
+        <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 text-sm">
           Save Ad Settings
         </button>
       </div>
@@ -605,27 +685,6 @@ export const AdminPanel: React.FC = () => {
     </div>
   );
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return renderDashboard();
-      case 'wallpapers':
-        return renderWallpapers();
-      case 'categories':
-        return renderCategories();
-      case 'users':
-        return renderUsers();
-      case 'upload':
-        return renderUpload();
-      case 'ads':
-        return renderAdSettings();
-      case 'settings':
-        return renderAppSettings();
-      default:
-        return renderDashboard();
-    }
-  };
-
   const renderWallpapers = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -682,10 +741,71 @@ export const AdminPanel: React.FC = () => {
     </div>
   );
 
+  const renderMobileMenu = () => (
+    <div className={`fixed inset-0 z-50 lg:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
+      <div className="fixed inset-0 bg-black/50" onClick={() => setIsMobileMenuOpen(false)} />
+      <div className="fixed left-0 top-0 bottom-0 w-64 backdrop-blur-xl bg-black/80 border-r border-white/10 p-6">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center">
+              <Shield className="w-4 h-4 text-white" />
+            </div>
+            <h1 className="text-lg font-bold text-white">Admin</h1>
+          </div>
+          <button onClick={() => setIsMobileMenuOpen(false)} className="text-white">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        <nav className="space-y-2">
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                setActiveTab(item.id);
+                setIsMobileMenuOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                activeTab === item.id
+                  ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-500/30'
+                  : 'text-purple-200 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <item.icon className="w-5 h-5" />
+              {item.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+    </div>
+  );
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return renderDashboard();
+      case 'wallpapers':
+        return renderWallpapers();
+      case 'categories':
+        return renderCategories();
+      case 'users':
+        return renderUsers();
+      case 'upload':
+        return renderUpload();
+      case 'ads':
+        return renderAdSettings();
+      case 'settings':
+        return renderAppSettings();
+      default:
+        return renderDashboard();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black">
       <div className="flex">
-        <div className="w-64 min-h-screen backdrop-blur-xl bg-black/50 border-r border-white/10">
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block w-64 min-h-screen backdrop-blur-xl bg-black/50 border-r border-white/10">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-xl flex items-center justify-center">
@@ -713,98 +833,31 @@ export const AdminPanel: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex-1 p-8">
+        {/* Mobile Menu */}
+        {renderMobileMenu()}
+
+        {/* Main Content */}
+        <div className="flex-1 p-4 lg:p-8">
+          {/* Mobile Header */}
+          <div className="lg:hidden flex items-center justify-between mb-6">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="text-white p-2 backdrop-blur-lg bg-white/10 rounded-xl"
+            >
+              <Settings className="w-6 h-6" />
+            </button>
+            <h1 className="text-lg font-bold text-white">Admin Panel</h1>
+            <button
+              onClick={onBack}
+              className="text-white p-2 backdrop-blur-lg bg-white/10 rounded-xl"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+          </div>
+
           {renderContent()}
         </div>
       </div>
     </div>
   );
 };
-
-function renderDashboard() {
-  const stats = [
-    { label: 'Total Wallpapers', value: '1,247', icon: Image, color: 'from-blue-500 to-blue-600' },
-    { label: 'Total Users', value: '8,923', icon: Users, color: 'from-green-500 to-green-600' },
-    { label: 'Total Downloads', value: '156K', icon: Download, color: 'from-purple-500 to-purple-600' },
-    { label: 'Total Views', value: '892K', icon: Eye, color: 'from-pink-500 to-pink-600' },
-  ];
-
-  return (
-    <div className="space-y-8">
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <div key={index} className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-200/70 text-sm font-medium">{stat.label}</p>
-                <p className="text-3xl font-bold text-white mt-2">{stat.value}</p>
-              </div>
-              <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-xl flex items-center justify-center`}>
-                <stat.icon className="w-6 h-6 text-white" />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function renderWallpapers() {
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-white">Wallpaper Management</h2>
-        <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 flex items-center gap-2">
-          <Plus className="w-5 h-5" />
-          Add Wallpaper
-        </button>
-      </div>
-
-      <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="border-b border-white/10">
-              <tr>
-                <th className="text-left p-4 text-purple-200 font-medium">Wallpaper</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Category</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Downloads</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Likes</th>
-                <th className="text-left p-4 text-purple-200 font-medium">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[1, 2, 3, 4, 5].map((item) => (
-                <tr key={item} className="border-b border-white/5 hover:bg-white/5">
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg"></div>
-                      <div>
-                        <p className="text-white font-medium">Anime Wallpaper {item}</p>
-                        <p className="text-purple-200/60 text-sm">1920x1080</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4 text-purple-200">Action</td>
-                  <td className="p-4 text-purple-200">1,234</td>
-                  <td className="p-4 text-purple-200">89</td>
-                  <td className="p-4">
-                    <div className="flex gap-2">
-                      <button className="p-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors">
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-}

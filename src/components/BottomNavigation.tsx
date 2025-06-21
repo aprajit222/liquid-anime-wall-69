@@ -16,6 +16,14 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentScree
     { id: 'settings' as Screen, label: 'Settings', icon: '⚙️' },
   ];
 
+  // Add admin option with long press detection
+  const handleLongPress = (screenId: Screen) => {
+    if (screenId === 'settings') {
+      // Long press on settings to access admin
+      onScreenChange('admin');
+    }
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-30 safe-area-bottom">
       <div className="backdrop-blur-xl bg-black/50 border-t border-white/10">
@@ -24,6 +32,18 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentScree
             <button
               key={item.id}
               onClick={() => onScreenChange(item.id)}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                handleLongPress(item.id);
+              }}
+              onTouchStart={(e) => {
+                const timer = setTimeout(() => handleLongPress(item.id), 800);
+                const handleTouchEnd = () => {
+                  clearTimeout(timer);
+                  document.removeEventListener('touchend', handleTouchEnd);
+                };
+                document.addEventListener('touchend', handleTouchEnd);
+              }}
               className={`flex flex-col items-center py-1.5 sm:py-2 px-2 sm:px-4 rounded-xl transition-all duration-200 min-w-0 flex-1 ${
                 currentScreen === item.id
                   ? 'bg-white/20 text-white'

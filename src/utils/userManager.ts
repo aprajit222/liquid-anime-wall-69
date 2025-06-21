@@ -1,4 +1,7 @@
 
+import { db } from '../config/firebase';
+import { collection, addDoc, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
+
 interface User {
   id: string;
   name: string;
@@ -51,10 +54,19 @@ export class UserManager {
       downloads: 0
     };
 
+    // Save locally
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     
-    // In a real app, you would send this to your backend
-    console.log('User saved:', user);
+    try {
+      // Save to Firebase
+      await addDoc(collection(db, 'users'), {
+        ...user,
+        createdAt: new Date()
+      });
+      console.log('User saved to Firebase:', user);
+    } catch (error) {
+      console.error('Failed to save user to Firebase:', error);
+    }
     
     return user;
   }
@@ -73,11 +85,47 @@ export class UserManager {
     if (user) {
       user.downloads++;
       localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+      
+      // Update Firebase
+      this.updateUserInFirebase(user);
+    }
+  }
+
+  static async updateUserInFirebase(user: User): Promise<void> {
+    try {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('deviceId', '==', user.deviceId));
+      const querySnapshot = await getDocs(q);
+      
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(doc(db, 'users', document.id), {
+          downloads: user.downloads,
+          status: user.status
+        });
+      });
+    } catch (error) {
+      console.error('Failed to update user in Firebase:', error);
     }
   }
 
   static isUserBanned(): boolean {
     const user = this.getUser();
     return user?.status === 'banned' || false;
+  }
+
+  static async banUser(deviceId: string): Promise<void> {
+    try {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('deviceId', '==', deviceId));
+      const querySnapshot = await getDocs(q);
+      
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(doc(db, 'users', document.id), {
+          status: 'banned'
+        });
+      });
+    } catch (error) {
+      console.error('Failed to ban user in Firebase:', error);
+    }
   }
 }

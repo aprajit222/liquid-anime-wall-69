@@ -11,12 +11,11 @@ import { UserNameModal } from './UserNameModal';
 import { AdBanner } from './AdBanner';
 import { UserManager } from '../utils/userManager';
 
-export type Screen = 'home' | 'gallery' | 'reels' | 'search' | 'settings';
+export type Screen = 'home' | 'gallery' | 'reels' | 'search' | 'settings' | 'admin';
 
 export const MainApp: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [isAdminMode, setIsAdminMode] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [wallpaperViewCount, setWallpaperViewCount] = useState(0);
   const [showInterstitial, setShowInterstitial] = useState(false);
@@ -55,16 +54,12 @@ export const MainApp: React.FC = () => {
     // Show interstitial ad every 6 wallpaper views
     if (newCount % 6 === 0) {
       setShowInterstitial(true);
-      setTimeout(() => setShowInterstitial(false), 3000); // Auto-close after 3 seconds
+      setTimeout(() => setShowInterstitial(false), 3000);
     }
   };
 
-  const toggleAdminMode = () => {
-    setIsAdminMode(!isAdminMode);
-  };
-
   const renderScreen = () => {
-    if (isAdminMode) {
+    if (currentScreen === 'admin') {
       return <AdminPanel />;
     }
 
@@ -72,41 +67,32 @@ export const MainApp: React.FC = () => {
       case 'home':
         return (
           <>
-            <AdBanner page="home" className="mx-4 mb-4" />
+            <div className="flex items-center justify-between p-4 pb-0">
+              <h1 className="text-2xl font-bold text-white">HQ Anime Wall</h1>
+            </div>
             <CategoryGrid onCategorySelect={handleCategorySelect} />
           </>
         );
       case 'gallery':
         return (
-          <>
-            <AdBanner page="gallery" className="mx-4 mb-4" />
-            <WallpaperGallery 
-              categoryId={selectedCategory} 
-              onBack={handleBackToHome}
-              onWallpaperView={handleWallpaperView}
-            />
-          </>
+          <WallpaperGallery 
+            categoryId={selectedCategory} 
+            onBack={handleBackToHome}
+            onWallpaperView={handleWallpaperView}
+          />
         );
       case 'reels':
-        return (
-          <>
-            <AdBanner page="reels" className="mx-4 mb-4" />
-            <ReelsViewer />
-          </>
-        );
+        return <ReelsViewer />;
       case 'search':
-        return (
-          <>
-            <AdBanner page="search" className="mx-4 mb-4" />
-            <SearchScreen />
-          </>
-        );
+        return <SearchScreen />;
       case 'settings':
         return <SettingsScreen />;
       default:
         return (
           <>
-            <AdBanner page="home" className="mx-4 mb-4" />
+            <div className="flex items-center justify-between p-4 pb-0">
+              <h1 className="text-2xl font-bold text-white">HQ Anime Wall</h1>
+            </div>
             <CategoryGrid onCategorySelect={handleCategorySelect} />
           </>
         );
@@ -115,20 +101,17 @@ export const MainApp: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black">
-      {/* Admin Toggle */}
-      <button
-        onClick={toggleAdminMode}
-        className="fixed top-4 right-4 z-50 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-xs font-bold opacity-50 hover:opacity-100 transition-opacity"
-      >
-        A
-      </button>
-
-      <div className="pb-20">
+      <div className="pb-32">
         {renderScreen()}
       </div>
       
-      {!isAdminMode && (
-        <BottomNavigation currentScreen={currentScreen} onScreenChange={setCurrentScreen} />
+      {currentScreen !== 'admin' && (
+        <>
+          <div className="fixed bottom-16 left-0 right-0 z-20">
+            <AdBanner page={currentScreen} className="mx-4 mb-2" />
+          </div>
+          <BottomNavigation currentScreen={currentScreen} onScreenChange={setCurrentScreen} />
+        </>
       )}
 
       {/* User Name Modal */}
